@@ -99,7 +99,6 @@ export async function createSession(
 		p_passphrase: options.passphrase || null,
 		p_join_password: options.joinPassword || null,
 		p_slide_deck: options.slideDeck || null,
-		p_speaker_names: null,
 		p_event_name: options.eventName || null,
 		p_company_name: options.companyName || null,
 		p_wifi_ssid: options.wifiSsid || null,

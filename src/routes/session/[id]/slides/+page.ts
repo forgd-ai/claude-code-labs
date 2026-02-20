@@ -19,9 +19,10 @@ function buildSpeakersHtml(presenters: Presenter[]): string {
 	if (presenters.length === 0) return '';
 	const cards = presenters.map((p) => {
 		// photo_url is a data URL or trusted external URL — alt text is escaped
+		const initial = escapeHtml(p.full_name.trim()[0]?.toUpperCase() ?? '?');
 		const avatar = p.photo_url
 			? `<img src="${p.photo_url}" alt="${escapeHtml(p.full_name)}" class="sp-photo" />`
-			: `<div class="sp-initial">${escapeHtml(p.full_name[0]?.toUpperCase() ?? '?')}</div>`;
+			: `<div class="sp-initial">${initial}</div>`;
 		const titleHtml = p.title ? `<span class="sp-title">${escapeHtml(p.title)}</span>` : '';
 		const orgHtml = p.organization ? `<span class="sp-org">${escapeHtml(p.organization)}</span>` : '';
 		return `<div class="sp-card">${avatar}<span class="sp-name">${escapeHtml(p.full_name)}</span>${titleHtml}${orgHtml}</div>`;

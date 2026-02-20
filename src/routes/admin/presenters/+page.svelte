@@ -86,7 +86,21 @@
 
 		let finalPhotoUrl = existingPhotoUrl;
 		if (photoFile) {
-			finalPhotoUrl = await resizeToDataUrl(photoFile);
+			try {
+				finalPhotoUrl = await resizeToDataUrl(photoFile);
+				// 300×300 JPEG at 0.85 is typically ~30–60KB; warn if somehow larger
+				const base64 = finalPhotoUrl.split(',')[1] ?? '';
+				const sizeKb = Math.ceil((base64.length * 3) / 4 / 1024);
+				if (sizeKb > 150) {
+					addToast('Photo is too large after resize. Try a different image.', 'error');
+					saving = false;
+					return;
+				}
+			} catch {
+				addToast('Failed to process photo. Please try a different image.', 'error');
+				saving = false;
+				return;
+			}
 		}
 
 		const { error: rpcErr } = await supabase.rpc('upsert_presenter', {

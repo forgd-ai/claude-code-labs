@@ -35,7 +35,11 @@
 		if (selectedPresenterIds.includes(id)) {
 			selectedPresenterIds = selectedPresenterIds.filter((x) => x !== id);
 		} else {
-			selectedPresenterIds = [...selectedPresenterIds, id];
+			// Insert and sort by display order so slides match the list
+			const order = new Map(allPresenters.map((p, i) => [p.id, i]));
+			selectedPresenterIds = [...selectedPresenterIds, id].sort(
+				(a, b) => (order.get(a) ?? 0) - (order.get(b) ?? 0)
+			);
 		}
 	}
 

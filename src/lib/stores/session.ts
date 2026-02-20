@@ -39,7 +39,7 @@ export async function fetchSession(sessionId: string): Promise<Session | null> {
 	if (!supabase) return null;
 	const { data, error } = await supabase
 		.from('sessions')
-		.select('*')
+		.select('id, lab_slug, lab_title, alias, has_join_password, created_at, expires_at')
 		.eq('id', sessionId)
 		.single();
 	if (error) return null;
@@ -59,7 +59,7 @@ export async function createSession(
 		p_lab_title: labTitle,
 		p_alias: alias || null,
 		p_passphrase: passphrase || null,
-		p_join_password: joinPassword ?? 'claude_code_wizards'
+		p_join_password: joinPassword || null
 	});
 	if (error) {
 		console.error('Failed to create session:', error);
@@ -68,16 +68,20 @@ export async function createSession(
 	return data as string;
 }
 
-export async function joinSession(sessionId: string, name: string): Promise<Participant | null> {
+export async function joinSession(
+	sessionId: string,
+	name: string,
+	joinPassword?: string
+): Promise<Participant | null> {
 	if (!supabase) return null;
-	const { data, error } = await supabase
-		.from('participants')
-		.upsert({ session_id: sessionId, name }, { onConflict: 'session_id,name' })
-		.select()
-		.single();
+	const { data, error } = await supabase.rpc('join_session', {
+		p_session_id: sessionId,
+		p_name: name,
+		p_join_password: joinPassword || null
+	});
 	if (error) {
 		console.error('Failed to join session:', error);
-		return null;
+		throw error;
 	}
 	const participant = data as Participant;
 	currentParticipant.set(participant);

@@ -11,17 +11,26 @@
 
 	async function handleJoin() {
 		if (!name.trim()) return;
-		if (session.join_password && password !== session.join_password) {
-			addToast('Incorrect password. Please try again.', 'error');
-			return;
-		}
 		joining = true;
-		const participant = await joinSession(session.id, name.trim());
-		if (participant) {
-			addToast(`Welcome, ${participant.name}!`, 'success');
-			onJoined();
-		} else {
-			addToast('Failed to join session.', 'error');
+		try {
+			const participant = await joinSession(
+				session.id,
+				name.trim(),
+				session.has_join_password ? password : undefined
+			);
+			if (participant) {
+				addToast(`Welcome, ${participant.name}!`, 'success');
+				onJoined();
+			} else {
+				addToast('Failed to join session.', 'error');
+			}
+		} catch (err: unknown) {
+			const message = (err as { message?: string })?.message ?? String(err);
+			if (message.includes('Incorrect join password')) {
+				addToast('Incorrect password. Please try again.', 'error');
+			} else {
+				addToast('Failed to join session.', 'error');
+			}
 		}
 		joining = false;
 	}
@@ -49,7 +58,7 @@
 					/>
 				</div>
 
-				{#if session.join_password}
+				{#if session.has_join_password}
 					<div class="field">
 						<label for="password">Session Password</label>
 						<input

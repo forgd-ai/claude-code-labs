@@ -9,7 +9,7 @@
 
 	let alias = $state('');
 	let passphrase = $state('');
-	let joinPassword = $state('claude_code_wizards');
+	let joinPassword = $state('');
 	let creating = $state(false);
 	let createdUrl = $state<string | null>(null);
 
@@ -78,13 +78,13 @@
 				</div>
 
 				<div class="field">
-					<label for="join-password">Participant Password</label>
-					<span class="field-hint">Participants will need this to join</span>
+					<label for="join-password">Participant Password (optional)</label>
+					<span class="field-hint">If set, participants will need this to join</span>
 					<input
 						id="join-password"
 						type="text"
 						bind:value={joinPassword}
-						placeholder="claude_code_wizards"
+						placeholder="Leave blank for open access"
 					/>
 				</div>
 

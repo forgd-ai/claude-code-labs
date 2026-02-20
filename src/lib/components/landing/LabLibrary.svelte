@@ -5,6 +5,29 @@
 	import type { ParsedLab } from '$lib/types';
 
 	let selectedLab = $state<ParsedLab | null>(null);
+
+	const allTags = [...new Set(labs.flatMap((l) => l.tags))]
+		.filter((t) => t !== 'claude-code')
+		.sort();
+
+	let selectedTags = $state<Set<string>>(new Set());
+
+	const filteredLabs = $derived(
+		selectedTags.size === 0
+			? labs
+			: labs.filter((lab) => lab.tags.some((t) => selectedTags.has(t)))
+	);
+
+	function toggleTag(tag: string) {
+		const next = new Set(selectedTags);
+		if (next.has(tag)) next.delete(tag);
+		else next.add(tag);
+		selectedTags = next;
+	}
+
+	function clearFilters() {
+		selectedTags = new Set();
+	}
 </script>
 
 {#if selectedLab}
@@ -12,8 +35,25 @@
 {:else}
 	<div class="lab-library">
 		<h2>Available Labs</h2>
+		{#if allTags.length > 0}
+			<div class="filter-bar">
+				{#each allTags as tag}
+					<button
+						class="filter-tag"
+						class:active={selectedTags.has(tag)}
+						onclick={() => toggleTag(tag)}
+					>{tag}</button>
+				{/each}
+				{#if selectedTags.size > 0}
+					<button class="filter-clear" onclick={clearFilters}>Clear</button>
+				{/if}
+			</div>
+			{#if selectedTags.size > 0}
+				<p class="filter-count">Showing {filteredLabs.length} of {labs.length} labs</p>
+			{/if}
+		{/if}
 		<div class="lab-grid">
-			{#each labs as lab}
+			{#each filteredLabs as lab}
 				<button class="lab-card" onclick={() => (selectedLab = lab)}>
 					<div class="lab-card-header">
 						<span class="difficulty-badge {lab.difficulty}">{lab.difficulty}</span>
@@ -42,6 +82,8 @@
 		</div>
 		{#if labs.length === 0}
 			<p class="empty">No labs available yet. Add markdown files to the <code>labs/</code> directory.</p>
+		{:else if filteredLabs.length === 0}
+			<p class="empty">No labs match the selected filters. <button class="filter-clear inline" onclick={clearFilters}>Clear filters</button></p>
 		{/if}
 	</div>
 {/if}
@@ -140,6 +182,69 @@
 		background: rgba(217, 119, 87, 0.1);
 		color: var(--orange-light);
 		border-radius: 4px;
+	}
+
+	.filter-bar {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		margin-bottom: 1rem;
+		align-items: center;
+	}
+
+	.filter-tag {
+		font-size: 0.75rem;
+		padding: 0.25rem 0.7rem;
+		border-radius: 999px;
+		border: 1px solid var(--dark-border);
+		background: var(--dark-surface);
+		color: var(--text-muted);
+		cursor: pointer;
+		transition: all 0.15s ease;
+		font-family: inherit;
+	}
+
+	.filter-tag:hover {
+		border-color: var(--orange);
+		color: var(--orange-light);
+	}
+
+	.filter-tag.active {
+		background: var(--orange);
+		border-color: var(--orange);
+		color: #fff;
+	}
+
+	.filter-clear {
+		font-size: 0.75rem;
+		padding: 0.25rem 0.7rem;
+		border-radius: 999px;
+		border: 1px solid var(--dark-border);
+		background: transparent;
+		color: var(--text-muted);
+		cursor: pointer;
+		font-family: inherit;
+		transition: all 0.15s ease;
+	}
+
+	.filter-clear:hover {
+		border-color: var(--text-muted);
+		color: var(--light);
+	}
+
+	.filter-clear.inline {
+		display: inline;
+		padding: 0;
+		border: none;
+		border-radius: 0;
+		color: var(--orange-light);
+		text-decoration: underline;
+	}
+
+	.filter-count {
+		font-size: 0.8rem;
+		color: var(--text-muted);
+		margin-bottom: 1rem;
 	}
 
 	.empty {

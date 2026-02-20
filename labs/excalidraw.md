@@ -4,7 +4,7 @@ title: "Claude Code Tutorial - Excalidraw"
 description: "A step-by-step guide to use Claude Code with Excalidraw, an open-source diagramming tool."
 difficulty: beginner
 estimated_duration: "75 minutes"
-prerequisites: ["Claude Code installed and set up"]
+prerequisites: ["Claude Code installed and set up", "Node.js 18+ installed", "npm installed", "Git installed"]
 tags: [typescript, react, claude-code]
 ---
 

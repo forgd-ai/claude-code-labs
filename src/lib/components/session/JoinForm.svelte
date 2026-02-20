@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { joinSession } from '$lib/stores/session';
 	import { addToast } from '$lib/stores/ui';
+	import { base } from '$app/paths';
 	import type { Session } from '$lib/types';
 
 	let { session, onJoined }: { session: Session; onJoined: () => void } = $props();
@@ -82,6 +83,9 @@
 				</button>
 			</form>
 		</div>
+		<p class="prereqs-link">
+			Need help setting up? <a href="{base}/session/{session.id}/prereqs" target="_blank">View prerequisites checklist →</a>
+		</p>
 	</div>
 </div>
 
@@ -154,5 +158,21 @@
 
 	.full-width {
 		width: 100%;
+	}
+
+	.prereqs-link {
+		text-align: center;
+		margin-top: 1.25rem;
+		font-size: 0.8rem;
+		color: var(--text-muted);
+	}
+
+	.prereqs-link a {
+		color: var(--text-muted);
+		text-decoration: underline;
+	}
+
+	.prereqs-link a:hover {
+		color: var(--orange);
 	}
 </style>

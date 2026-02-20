@@ -4,7 +4,7 @@ title: "Claude Code Tutorial - eShopOnWeb"
 description: "A step-by-step guide to use Claude Code with eShopOnWeb, Microsoft's official ASP.NET Core reference application."
 difficulty: intermediate
 estimated_duration: "90 minutes"
-prerequisites: ["Claude Code installed and set up", ".NET SDK installed (version matching the project — check global.json)", "Git installed"]
+prerequisites: ["Claude Code installed and set up", ".NET 8 SDK installed", "Git installed"]
 tags: [dotnet, aspnet-core, claude-code]
 ---
 

@@ -4,7 +4,7 @@ title: "Claude Code Tutorial - Spring Petclinic"
 description: "A step-by-step guide to use Claude Code with Spring Petclinic, the canonical Spring Boot sample application."
 difficulty: intermediate
 estimated_duration: "90 minutes"
-prerequisites: ["Claude Code installed and set up", "Java 17+ installed", "Git installed"]
+prerequisites: ["Claude Code installed and set up", "Java 21+ installed", "Git installed"]
 tags: [java, spring-boot, claude-code]
 ---
 

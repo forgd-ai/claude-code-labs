@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { supabase } from '$lib/supabase';
+	import { base } from '$app/paths';
 	import type { Session, ParsedLab, Participant, Progress } from '$lib/types';
 
 	let { session, lab }: { session: Session; lab: ParsedLab } = $props();
@@ -71,7 +72,14 @@
 <div class="admin-dashboard">
 	<div class="dash-header">
 		<h1>Admin Dashboard</h1>
-		<button class="btn btn-secondary btn-sm" onclick={exportCsv}>Export CSV</button>
+		<div class="dash-actions">
+			<a
+				href="{base}/session/{session.id}/prereqs"
+				target="_blank"
+				class="btn btn-secondary btn-sm"
+			>Prerequisites ↗</a>
+			<button class="btn btn-secondary btn-sm" onclick={exportCsv}>Export CSV</button>
+		</div>
 	</div>
 
 	{#if loading}
@@ -155,6 +163,11 @@
 		justify-content: space-between;
 		align-items: center;
 		margin-bottom: 2rem;
+	}
+
+	.dash-actions {
+		display: flex;
+		gap: 0.5rem;
 	}
 
 	.loading-text {

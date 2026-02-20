@@ -50,14 +50,16 @@ export async function createSession(
 	labSlug: string,
 	labTitle: string,
 	alias?: string,
-	passphrase?: string
+	passphrase?: string,
+	joinPassword?: string
 ): Promise<string | null> {
 	if (!supabase) return null;
 	const { data, error } = await supabase.rpc('create_session', {
 		p_lab_slug: labSlug,
 		p_lab_title: labTitle,
 		p_alias: alias || null,
-		p_passphrase: passphrase || null
+		p_passphrase: passphrase || null,
+		p_join_password: joinPassword ?? 'claude_code_wizards'
 	});
 	if (error) {
 		console.error('Failed to create session:', error);

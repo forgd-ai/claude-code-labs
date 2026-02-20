@@ -9,6 +9,7 @@
 
 	let alias = $state('');
 	let passphrase = $state('');
+	let joinPassword = $state('claude_code_wizards');
 	let creating = $state(false);
 	let createdUrl = $state<string | null>(null);
 
@@ -18,7 +19,8 @@
 			lab.slug,
 			lab.title,
 			alias || undefined,
-			passphrase || undefined
+			passphrase || undefined,
+			joinPassword || undefined
 		);
 
 		if (sessionId) {
@@ -72,6 +74,17 @@
 						type="text"
 						bind:value={alias}
 						placeholder="e.g. spring-workshop-jan-2026"
+					/>
+				</div>
+
+				<div class="field">
+					<label for="join-password">Participant Password</label>
+					<span class="field-hint">Participants will need this to join</span>
+					<input
+						id="join-password"
+						type="text"
+						bind:value={joinPassword}
+						placeholder="claude_code_wizards"
 					/>
 				</div>
 
@@ -138,6 +151,13 @@
 
 	.field label {
 		color: var(--text-muted);
+	}
+
+	.field-hint {
+		display: block;
+		color: var(--text-muted);
+		font-size: 0.8rem;
+		margin-bottom: 0.25rem;
 	}
 
 	.field input {

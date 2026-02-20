@@ -6,10 +6,15 @@
 	let { session, onJoined }: { session: Session; onJoined: () => void } = $props();
 
 	let name = $state('');
+	let password = $state('');
 	let joining = $state(false);
 
 	async function handleJoin() {
 		if (!name.trim()) return;
+		if (session.join_password && password !== session.join_password) {
+			addToast('Incorrect password. Please try again.', 'error');
+			return;
+		}
 		joining = true;
 		const participant = await joinSession(session.id, name.trim());
 		if (participant) {
@@ -43,6 +48,18 @@
 						autofocus
 					/>
 				</div>
+
+				{#if session.join_password}
+					<div class="field">
+						<label for="password">Session Password</label>
+						<input
+							id="password"
+							type="password"
+							bind:value={password}
+							placeholder="Enter the session password"
+						/>
+					</div>
+				{/if}
 
 				{#if session.alias}
 					<div class="field">

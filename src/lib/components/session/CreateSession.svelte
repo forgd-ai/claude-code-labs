@@ -183,7 +183,7 @@
 												{#if p.photo_url}
 													<img src={p.photo_url} alt={p.full_name} />
 												{:else}
-													<img src="/logos/claude-robot.png" alt={p.full_name} />
+													<img src="{base}/logos/claude-robot.png" alt={p.full_name} />
 												{/if}
 											</span>
 											<span class="check-info">

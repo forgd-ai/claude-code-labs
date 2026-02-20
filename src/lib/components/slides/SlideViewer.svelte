@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { ParsedSlide } from '$lib/types';
+	import { base } from '$app/paths';
 
 	let {
 		slides,
@@ -73,6 +74,7 @@
 	function printSlides() {
 		const win = window.open('', '_blank');
 		if (!win) return;
+		const origin = window.location.origin + base;
 
 		const slidePages = slides.map((s) => `
 			<div class="slide-page theme-${s.theme ?? 'light'} slide-${s.type}">
@@ -191,8 +193,8 @@
 
 	<!-- Logo chrome -->
 	<div class="slide-chrome">
-		<img src="/logos/anthropic-wordmark.png" alt="Anthropic" class="logo-anthropic" />
-		<img src="/logos/forgd.png" alt="forgd" class="logo-forgd" />
+		<img src="{base}/logos/anthropic-wordmark.png" alt="Anthropic" class="logo-anthropic" />
+		<img src="{base}/logos/forgd.png" alt="forgd" class="logo-forgd" />
 	</div>
 
 	<!-- Slide content -->

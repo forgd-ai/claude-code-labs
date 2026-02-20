@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { supabase } from '$lib/supabase';
 	import { addToast } from '$lib/stores/ui';
+	import { base } from '$app/paths';
 	import type { Presenter } from '$lib/types';
 
 	let { data } = $props();
@@ -169,7 +170,7 @@
 							{:else if existingPhotoUrl}
 								<img src={existingPhotoUrl} alt={fullName} class="avatar-preview" />
 							{:else}
-								<img src="/logos/claude-robot.png" alt="placeholder" class="avatar-preview" />
+								<img src="{base}/logos/claude-robot.png" alt="placeholder" class="avatar-preview" />
 							{/if}
 						</div>
 						<div class="photo-upload">
@@ -224,7 +225,7 @@
 					<div class="presenter-card">
 						<div class="card-avatar">
 							<img
-								src={p.photo_url ?? '/logos/claude-robot.png'}
+								src={p.photo_url ?? `${base}/logos/claude-robot.png`}
 								alt={p.full_name}
 							/>
 						</div>

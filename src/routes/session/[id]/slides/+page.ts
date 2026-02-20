@@ -2,6 +2,7 @@ import type { PageLoad } from './$types';
 import { decks } from 'virtual:slides';
 import { fetchSession, fetchSessionPresenters } from '$lib/stores/session';
 import { error } from '@sveltejs/kit';
+import { base } from '$app/paths';
 import type { Presenter } from '$lib/types';
 
 export const prerender = false;
@@ -21,7 +22,7 @@ function buildSpeakersHtml(presenters: Presenter[]): string {
 		// photo_url is a data URL or trusted external URL — alt text is escaped
 		const avatar = p.photo_url
 			? `<img src="${p.photo_url}" alt="${escapeHtml(p.full_name)}" class="sp-photo" />`
-			: `<img src="/logos/claude-robot.png" alt="${escapeHtml(p.full_name)}" class="sp-photo sp-placeholder" />`;
+			: `<img src="${base}/logos/claude-robot.png" alt="${escapeHtml(p.full_name)}" class="sp-photo sp-placeholder" />`;
 		const titleHtml = p.title ? `<span class="sp-title">${escapeHtml(p.title)}</span>` : '';
 		const orgHtml = p.organization ? `<span class="sp-org">${escapeHtml(p.organization)}</span>` : '';
 		return `<div class="sp-card">${avatar}<span class="sp-name">${escapeHtml(p.full_name)}</span>${titleHtml}${orgHtml}</div>`;

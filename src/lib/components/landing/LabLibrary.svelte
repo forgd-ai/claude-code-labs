@@ -6,9 +6,7 @@
 
 	let selectedLab = $state<ParsedLab | null>(null);
 
-	const allTags = [...new Set(labs.flatMap((l) => l.tags))]
-		.filter((t) => t !== 'claude-code')
-		.sort();
+	const allTags = [...new Set(labs.flatMap((l) => l.tags))].sort();
 
 	let selectedTags = $state<Set<string>>(new Set());
 
@@ -41,6 +39,7 @@
 					<button
 						class="filter-tag"
 						class:active={selectedTags.has(tag)}
+						aria-pressed={selectedTags.has(tag)}
 						onclick={() => toggleTag(tag)}
 					>{tag}</button>
 				{/each}
@@ -209,6 +208,11 @@
 		color: var(--orange-light);
 	}
 
+	.filter-tag:focus-visible {
+		outline: 2px solid var(--orange);
+		outline-offset: 2px;
+	}
+
 	.filter-tag.active {
 		background: var(--orange);
 		border-color: var(--orange);
@@ -230,6 +234,11 @@
 	.filter-clear:hover {
 		border-color: var(--text-muted);
 		color: var(--light);
+	}
+
+	.filter-clear:focus-visible {
+		outline: 2px solid var(--orange);
+		outline-offset: 2px;
 	}
 
 	.filter-clear.inline {

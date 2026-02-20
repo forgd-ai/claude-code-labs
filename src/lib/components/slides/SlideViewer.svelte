@@ -149,18 +149,18 @@
 
 	/* === Themes === */
 	.theme-light {
-		background: var(--light);
-		color: var(--text-primary);
+		background: #ede4cc;
+		color: #1a1a19;
 	}
 
 	.theme-dark {
-		background: var(--dark);
-		color: var(--light);
+		background: #18180f;
+		color: #f5f1e8;
 	}
 
 	.theme-orange {
-		background: var(--orange);
-		color: #fff;
+		background: #c4714f;
+		color: #1a1a19;
 	}
 
 	/* === Progress bar === */
@@ -180,12 +180,16 @@
 
 	.progress-fill {
 		height: 100%;
-		background: var(--orange);
+		background: #c4714f;
 		transition: width 0.25s ease;
 	}
 
+	.theme-light .progress-fill {
+		background: #c4714f;
+	}
+
 	.theme-orange .progress-fill {
-		background: rgba(255, 255, 255, 0.6);
+		background: rgba(0, 0, 0, 0.2);
 	}
 
 	/* === Slide === */
@@ -214,7 +218,7 @@
 	.theme-light .slide-inner :global(h1) {
 		font-size: clamp(2rem, 5vw, 3.5rem);
 		font-weight: 700;
-		color: var(--dark);
+		color: #1a1a19;
 		margin-bottom: 0.5em;
 		line-height: 1.15;
 	}
@@ -222,14 +226,14 @@
 	.theme-light .slide-inner :global(h2) {
 		font-size: clamp(1.5rem, 3.5vw, 2.5rem);
 		font-weight: 600;
-		color: var(--dark);
+		color: #1a1a19;
 		margin-bottom: 0.5em;
 	}
 
 	.theme-light .slide-inner :global(h3) {
 		font-size: clamp(1.1rem, 2.5vw, 1.75rem);
 		font-weight: 500;
-		color: var(--text-secondary);
+		color: #5a5348;
 		margin-bottom: 0.75em;
 	}
 
@@ -237,7 +241,7 @@
 		font-size: clamp(0.9rem, 2vw, 1.25rem);
 		line-height: 1.6;
 		margin-bottom: 0.75em;
-		color: var(--text-primary);
+		color: #1a1a19;
 	}
 
 	.theme-light .slide-inner :global(ul),
@@ -245,6 +249,7 @@
 		font-size: clamp(0.85rem, 1.8vw, 1.15rem);
 		padding-left: 1.5em;
 		margin-bottom: 0.75em;
+		color: #1a1a19;
 	}
 
 	.theme-light .slide-inner :global(li) {
@@ -252,16 +257,20 @@
 		line-height: 1.5;
 	}
 
+	.theme-light .slide-inner :global(li::marker) {
+		color: #c4714f;
+	}
+
 	.theme-light .slide-inner :global(strong) {
 		font-weight: 700;
-		color: var(--dark);
+		color: #1a1a19;
 	}
 
 	.theme-light .slide-inner :global(blockquote) {
-		border-left: 4px solid var(--orange);
+		border-left: 4px solid #c4714f;
 		padding: 0.75em 1em;
 		margin: 1em 0;
-		background: var(--light-surface);
+		background: rgba(255, 255, 255, 0.4);
 		border-radius: 0 var(--radius) var(--radius) 0;
 		font-style: italic;
 		font-size: clamp(0.85rem, 1.8vw, 1.1rem);
@@ -270,17 +279,18 @@
 	.theme-light .slide-inner :global(code) {
 		font-family: var(--font-mono);
 		font-size: 0.85em;
-		background: var(--light-surface);
+		background: rgba(255, 255, 255, 0.5);
 		padding: 0.15em 0.4em;
 		border-radius: 4px;
-		border: 1px solid var(--light-border);
+		border: 1px solid rgba(0, 0, 0, 0.1);
+		color: #1a1a19;
 	}
 
 	.theme-light .slide-inner :global(pre) {
 		font-family: var(--font-mono);
 		font-size: clamp(0.7rem, 1.4vw, 0.9rem);
-		background: var(--dark);
-		color: #e0ddd5;
+		background: #18180f;
+		color: #e8e0d0;
 		padding: 1em 1.25em;
 		border-radius: var(--radius);
 		overflow-x: auto;
@@ -380,7 +390,7 @@
 	.theme-orange .slide-inner :global(h1) {
 		font-size: clamp(2rem, 5vw, 4rem);
 		font-weight: 700;
-		color: #fff;
+		color: #1a1a19;
 		margin-bottom: 0.5em;
 		line-height: 1.1;
 	}
@@ -388,13 +398,13 @@
 	.theme-orange .slide-inner :global(h2) {
 		font-size: clamp(1.5rem, 3.5vw, 2.5rem);
 		font-weight: 600;
-		color: #fff;
+		color: #1a1a19;
 		margin-bottom: 0.5em;
 	}
 
 	.theme-orange .slide-inner :global(p) {
 		font-size: clamp(0.9rem, 2vw, 1.25rem);
-		color: rgba(255,255,255,0.9);
+		color: #1a1a19;
 		margin-bottom: 0.75em;
 	}
 

@@ -400,4 +400,4 @@ Feedback form — link in chat.
 
 **{{event_name}}** — {{company_name}}
 
-*Presented by {{speakers}}*
+{{speakers}}

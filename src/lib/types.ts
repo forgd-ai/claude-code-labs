@@ -39,6 +39,15 @@ export interface ParsedDeck {
 	slides: ParsedSlide[];
 }
 
+export interface Presenter {
+	id: string;
+	full_name: string;
+	title: string | null;
+	organization: string;
+	photo_url: string | null;
+	created_at?: string;
+}
+
 export interface Session {
 	id: string;
 	lab_slug: string;
@@ -48,7 +57,6 @@ export interface Session {
 	created_at: string;
 	expires_at: string | null;
 	slide_deck?: string | null;
-	speaker_names?: string | null;
 	event_name?: string | null;
 	company_name?: string | null;
 	wifi_ssid?: string | null;

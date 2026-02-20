@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
-	import { createSession } from '$lib/stores/session';
+	import { createSession, fetchAllPresenters, setSessionPresenters } from '$lib/stores/session';
 	import { addToast } from '$lib/stores/ui';
-	import type { ParsedLab } from '$lib/types';
+	import type { ParsedLab, Presenter } from '$lib/types';
 	import { decks } from 'virtual:slides';
 
 	let { lab, onBack }: { lab: ParsedLab; onBack: () => void } = $props();
@@ -17,12 +17,31 @@
 
 	// Presentation fields
 	let slideDeck = $state('');
-	let speakerNames = $state('');
+	let selectedPresenterIds = $state<string[]>([]);
+	let allPresenters = $state<Presenter[]>([]);
 	let eventName = $state('');
 	let companyName = $state('');
 	let wifiSsid = $state('');
 	let wifiPassword = $state('');
 	let apiCreditUrl = $state('');
+
+	$effect(() => {
+		if (showPresentation && allPresenters.length === 0) {
+			fetchAllPresenters().then((p) => { allPresenters = p; });
+		}
+	});
+
+	function togglePresenter(id: string) {
+		if (selectedPresenterIds.includes(id)) {
+			selectedPresenterIds = selectedPresenterIds.filter((x) => x !== id);
+		} else {
+			// Insert and sort by display order so slides match the list
+			const order = new Map(allPresenters.map((p, i) => [p.id, i]));
+			selectedPresenterIds = [...selectedPresenterIds, id].sort(
+				(a, b) => (order.get(a) ?? 0) - (order.get(b) ?? 0)
+			);
+		}
+	}
 
 	async function handleCreate() {
 		creating = true;
@@ -31,7 +50,6 @@
 			passphrase: passphrase || undefined,
 			joinPassword: joinPassword || undefined,
 			slideDeck: slideDeck || undefined,
-			speakerNames: speakerNames || undefined,
 			eventName: eventName || undefined,
 			companyName: companyName || undefined,
 			wifiSsid: wifiSsid || undefined,
@@ -39,9 +57,14 @@
 			apiCreditUrl: apiCreditUrl || undefined
 		});
 
+		if (sessionId && selectedPresenterIds.length > 0) {
+			const ok = await setSessionPresenters(sessionId, selectedPresenterIds);
+			if (!ok) addToast('Session created but presenter linking failed.', 'error');
+		}
+
 		if (sessionId) {
 			createdUrl = `${window.location.origin}${base}/session/${sessionId}`;
-			addToast('Session created!', 'success');
+			if (selectedPresenterIds.length === 0) addToast('Session created!', 'success');
 		} else {
 			addToast('Failed to create session. Check Supabase configuration.', 'error');
 		}
@@ -142,13 +165,36 @@
 						</div>
 
 						<div class="field">
-							<label for="speaker-names">Speaker Name(s)</label>
-							<input
-								id="speaker-names"
-								type="text"
-								bind:value={speakerNames}
-								placeholder="e.g. Jane Smith, Bob Jones"
-							/>
+							<label>Presenters</label>
+							{#if allPresenters.length === 0}
+								<p class="no-presenters">
+									No presenters yet. <a href="/admin/presenters" target="_blank">Add some →</a>
+								</p>
+							{:else}
+								<div class="presenter-checkboxes">
+									{#each allPresenters as p (p.id)}
+										<label class="presenter-check" class:selected={selectedPresenterIds.includes(p.id)}>
+											<input
+												type="checkbox"
+												checked={selectedPresenterIds.includes(p.id)}
+												onchange={() => togglePresenter(p.id)}
+											/>
+											<span class="check-avatar">
+												{#if p.photo_url}
+													<img src={p.photo_url} alt={p.full_name} />
+												{:else}
+													<img src="/logos/claude-robot.png" alt={p.full_name} />
+												{/if}
+											</span>
+											<span class="check-info">
+												<span class="check-name">{p.full_name}</span>
+												{#if p.title}<span class="check-title">{p.title}</span>{/if}
+												<span class="check-org">{p.organization}</span>
+											</span>
+										</label>
+									{/each}
+								</div>
+							{/if}
 						</div>
 
 						<div class="field-row">
@@ -389,5 +435,87 @@
 		outline: none;
 		border-color: var(--orange);
 		box-shadow: 0 0 0 3px rgba(217, 119, 87, 0.15);
+	}
+
+	/* Presenter checkboxes */
+	.no-presenters {
+		color: var(--text-muted);
+		font-size: 0.85rem;
+		margin: 0.25rem 0 0;
+	}
+
+	.no-presenters a {
+		color: var(--orange);
+		text-decoration: none;
+	}
+
+	.presenter-checkboxes {
+		display: flex;
+		flex-direction: column;
+		gap: 0.4rem;
+		margin-top: 0.25rem;
+	}
+
+	.presenter-check {
+		display: flex;
+		align-items: center;
+		gap: 0.65rem;
+		padding: 0.45rem 0.65rem;
+		border: 1px solid var(--dark-border);
+		border-radius: var(--radius);
+		cursor: pointer;
+		transition: border-color 0.15s, background 0.15s;
+	}
+
+	.presenter-check:hover {
+		border-color: var(--orange);
+	}
+
+	.presenter-check.selected {
+		border-color: var(--orange);
+		background: rgba(217, 119, 87, 0.08);
+	}
+
+	.presenter-check input[type="checkbox"] {
+		width: auto;
+		margin: 0;
+		accent-color: var(--orange);
+	}
+
+	.check-avatar {
+		width: 28px;
+		height: 28px;
+		border-radius: 50%;
+		overflow: hidden;
+		flex-shrink: 0;
+	}
+
+	.check-avatar img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+
+	.check-info {
+		display: flex;
+		flex-direction: column;
+		gap: 0.1rem;
+	}
+
+	.check-name {
+		font-size: 0.85rem;
+		color: var(--light);
+	}
+
+	.check-title {
+		font-size: 0.75rem;
+		color: var(--text-muted);
+	}
+
+	.check-org {
+		font-size: 0.7rem;
+		color: var(--orange);
+		font-family: var(--font-mono);
 	}
 </style>

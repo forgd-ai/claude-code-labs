@@ -70,6 +70,103 @@
 		isFullscreen = !!document.fullscreenElement;
 	}
 
+	function printSlides() {
+		const win = window.open('', '_blank');
+		if (!win) return;
+
+		const slidePages = slides.map((s) => `
+			<div class="slide-page theme-${s.theme ?? 'light'} slide-${s.type}">
+				<div class="slide-inner">${substituteTokens(s.html)}</div>
+			</div>`).join('');
+
+		win.document.write(`<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Slides</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  @page { size: 297mm 167mm; margin: 0; }
+  html, body { -webkit-print-color-adjust: exact; print-color-adjust: exact; font-family: system-ui, sans-serif; }
+  .slide-page {
+    width: 297mm; height: 167mm;
+    display: flex; align-items: center; justify-content: center;
+    padding: 11% 8% 6%;
+    page-break-after: always;
+    position: relative;
+    overflow: hidden;
+  }
+  .slide-inner { width: 100%; max-width: 900px; }
+  .slide-title .slide-inner,
+  .slide-welcome .slide-inner,
+  .slide-section .slide-inner { text-align: center; }
+  /* Themes */
+  .theme-light { background: #ede4cc; color: #1a1a19; }
+  .theme-dark  { background: #18180f; color: #f5f1e8; }
+  .theme-orange { background: #c4714f; color: #1a1a19; }
+  /* Typography */
+  h1 { font-size: 2.8rem; font-weight: 700; margin-bottom: 0.5em; line-height: 1.15; }
+  h2 { font-size: 2rem; font-weight: 600; margin-bottom: 0.5em; }
+  h3 { font-size: 1.4rem; font-weight: 500; margin-bottom: 0.75em; }
+  p  { font-size: 1rem; line-height: 1.6; margin-bottom: 0.75em; }
+  ul, ol { font-size: 0.95rem; padding-left: 1.5em; margin-bottom: 0.75em; }
+  li { margin-bottom: 0.4em; line-height: 1.5; }
+  .theme-light li::marker { color: #c4714f; }
+  strong { font-weight: 700; }
+  .theme-dark strong { color: #d4956a; }
+  blockquote {
+    border-left: 4px solid #c4714f; padding: 0.35em 0.75em;
+    margin: 0.5em 0; font-style: italic; font-size: 0.95rem;
+    border-radius: 0 4px 4px 0;
+  }
+  .theme-light blockquote { background: rgba(255,255,255,0.4); }
+  .theme-dark blockquote { background: rgba(255,255,255,0.05); }
+  code {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.82em;
+    padding: 0.1em 0.35em; border-radius: 3px;
+  }
+  .theme-light code { background: rgba(255,255,255,0.5); border: 1px solid rgba(0,0,0,0.1); }
+  .theme-dark  code { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); color: #d4956a; }
+  pre {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;
+    padding: 0.5em 0.75em; border-radius: 4px; overflow: hidden;
+    margin: 0.75em 0; line-height: 1.5;
+  }
+  .theme-light pre { background: #18180f; color: #e8e0d0; }
+  .theme-dark  pre { background: rgba(0,0,0,0.4); color: #e0ddd5; border: 1px solid rgba(255,255,255,0.08); }
+  pre code,
+  .theme-light pre code,
+  .theme-dark pre code,
+  .theme-orange pre code { background: none !important; border: none !important; padding: 0 !important; color: inherit !important; font-size: 1em !important; }
+  /* Two-col */
+  .slide-two-col .slide-inner {
+    display: grid; grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto 1fr; column-gap: 3em; align-content: start;
+  }
+  .slide-two-col .slide-inner h2 { grid-column: 1/-1; grid-row: 1; margin-bottom: 1.25em; }
+  .slide-two-col .slide-inner p:nth-of-type(1) { grid-column: 1; grid-row: 2; }
+  .slide-two-col .slide-inner p:nth-of-type(2) { grid-column: 2; grid-row: 2; }
+  .slide-two-col .slide-inner ul:nth-of-type(1) { grid-column: 1; grid-row: 3; }
+  .slide-two-col .slide-inner ul:nth-of-type(2) { grid-column: 2; grid-row: 3; }
+  /* Presenter cards */
+  .sp-cards { display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; margin-top: 1.5em; }
+  .sp-card { display: flex; flex-direction: column; align-items: center; gap: 0.6em; }
+  .sp-photo, .sp-initial { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; }
+  .sp-initial { background: #c4714f; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 700; }
+  .sp-name { font-size: 1.1rem; font-weight: 600; text-align: center; }
+  .sp-title { font-size: 0.85rem; text-align: center; opacity: 0.7; }
+  .sp-org { font-size: 0.75rem; text-align: center; font-family: 'JetBrains Mono', monospace; opacity: 0.6; }
+  .theme-light .sp-org { color: #c4714f; }
+</style>
+</head>
+<body>${slidePages}</body>
+</html>`);
+		win.document.close();
+		win.focus();
+		setTimeout(() => { win.print(); }, 1200);
+	}
+
 	$effect(() => {
 		document.addEventListener('fullscreenchange', handleFullscreenChange);
 		return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
@@ -128,6 +225,10 @@
 
 		<button class="ctrl-btn" onclick={toggleFullscreen} aria-label="Toggle fullscreen">
 			{isFullscreen ? '⤢' : '⤡'}
+		</button>
+
+		<button class="ctrl-btn" onclick={printSlides} aria-label="Download PDF" title="Download PDF">
+			PDF
 		</button>
 	</div>
 </div>
@@ -205,7 +306,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		padding: 6% 8%;
+		padding: 11% 8% 6%;
 	}
 
 	.slide-inner {
@@ -274,8 +375,8 @@
 
 	.theme-light .slide-inner :global(blockquote) {
 		border-left: 4px solid #c4714f;
-		padding: 0.75em 1em;
-		margin: 1em 0;
+		padding: 0.35em 0.75em;
+		margin: 0.5em 0;
 		background: rgba(255, 255, 255, 0.4);
 		border-radius: 0 var(--radius) var(--radius) 0;
 		font-style: italic;
@@ -297,7 +398,7 @@
 		font-size: clamp(0.7rem, 1.4vw, 0.9rem);
 		background: #18180f;
 		color: #e8e0d0;
-		padding: 1em 1.25em;
+		padding: 0.5em 0.75em;
 		border-radius: var(--radius);
 		overflow-x: auto;
 		margin: 0.75em 0;
@@ -377,7 +478,7 @@
 		font-size: clamp(0.7rem, 1.4vw, 0.9rem);
 		background: rgba(0, 0, 0, 0.4);
 		color: #e0ddd5;
-		padding: 1em 1.25em;
+		padding: 0.5em 0.75em;
 		border-radius: var(--radius);
 		overflow-x: auto;
 		margin: 0.75em 0;
@@ -535,4 +636,55 @@
 		min-width: 3.5rem;
 		text-align: center;
 	}
+
+	/* === Presenter cards (rendered via {{speakers}} placeholder) === */
+	:global(.sp-cards) {
+		display: flex;
+		justify-content: center;
+		gap: clamp(1.5rem, 4vw, 3rem);
+		flex-wrap: wrap;
+		margin-top: 1.5em;
+	}
+
+	:global(.sp-card) {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.6em;
+	}
+
+	:global(.sp-photo),
+	:global(.sp-initial) {
+		width: clamp(80px, 12vw, 140px);
+		height: clamp(80px, 12vw, 140px);
+		border-radius: 50%;
+		object-fit: cover;
+	}
+
+
+	:global(.sp-name) {
+		font-size: clamp(0.9rem, 2vw, 1.3rem);
+		font-weight: 600;
+		text-align: center;
+	}
+
+	:global(.sp-title) {
+		font-size: clamp(0.75rem, 1.5vw, 1rem);
+		text-align: center;
+		opacity: 0.7;
+	}
+
+	:global(.sp-org) {
+		font-size: clamp(0.65rem, 1.2vw, 0.85rem);
+		text-align: center;
+		font-family: var(--font-mono);
+		opacity: 0.6;
+	}
+
+	.theme-dark :global(.sp-name) { color: var(--light); }
+	.theme-dark :global(.sp-title) { color: rgba(250, 249, 245, 0.6); }
+	.theme-dark :global(.sp-org) { color: rgba(250, 249, 245, 0.5); }
+	.theme-light :global(.sp-name) { color: #1a1a19; }
+	.theme-light :global(.sp-title) { color: #5a5348; }
+	.theme-light :global(.sp-org) { color: #c4714f; }
 </style>

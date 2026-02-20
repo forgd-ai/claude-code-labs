@@ -30,6 +30,7 @@ export interface Session {
 	lab_slug: string;
 	lab_title: string;
 	alias: string | null;
+	has_join_password: boolean;
 	created_at: string;
 	expires_at: string | null;
 }

@@ -6,17 +6,31 @@
 	let { session, onJoined }: { session: Session; onJoined: () => void } = $props();
 
 	let name = $state('');
+	let password = $state('');
 	let joining = $state(false);
 
 	async function handleJoin() {
 		if (!name.trim()) return;
 		joining = true;
-		const participant = await joinSession(session.id, name.trim());
-		if (participant) {
-			addToast(`Welcome, ${participant.name}!`, 'success');
-			onJoined();
-		} else {
-			addToast('Failed to join session.', 'error');
+		try {
+			const participant = await joinSession(
+				session.id,
+				name.trim(),
+				session.has_join_password ? password : undefined
+			);
+			if (participant) {
+				addToast(`Welcome, ${participant.name}!`, 'success');
+				onJoined();
+			} else {
+				addToast('Failed to join session.', 'error');
+			}
+		} catch (err: unknown) {
+			const message = (err as { message?: string })?.message ?? String(err);
+			if (message.includes('Incorrect join password')) {
+				addToast('Incorrect password. Please try again.', 'error');
+			} else {
+				addToast('Failed to join session.', 'error');
+			}
 		}
 		joining = false;
 	}
@@ -43,6 +57,18 @@
 						autofocus
 					/>
 				</div>
+
+				{#if session.has_join_password}
+					<div class="field">
+						<label for="password">Session Password</label>
+						<input
+							id="password"
+							type="password"
+							bind:value={password}
+							placeholder="Enter the session password"
+						/>
+					</div>
+				{/if}
 
 				{#if session.alias}
 					<div class="field">

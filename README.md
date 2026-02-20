@@ -13,10 +13,14 @@ A workshop platform for running guided Claude Code tutorials. Trainers create se
 
 ## Available Labs
 
-| Lab | Difficulty | Duration |
-|-----|-----------|----------|
-| Spring Petclinic | Intermediate | 90 min |
-| Excalidraw | Beginner | 75 min |
+| Lab | Language | Difficulty | Duration |
+|-----|----------|-----------|----------|
+| Excalidraw | TypeScript/React | Beginner | 75 min |
+| Flask Microblog | Python/Flask | Beginner | 75 min |
+| Spring Petclinic | Java/Spring Boot | Intermediate | 90 min |
+| eShopOnWeb | .NET/ASP.NET Core | Intermediate | 90 min |
+| Go RealWorld | Go/Gin | Intermediate | 90 min |
+| Rust Zero2Prod | Rust/Actix-web | Advanced | 90 min |
 
 ## Getting Started
 

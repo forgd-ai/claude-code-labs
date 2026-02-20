@@ -18,7 +18,8 @@ async function markdownToHtml(md: string): Promise<string> {
 		.use(remarkRehype, { allowDangerousHtml: true })
 		.use(rehypeStringify, { allowDangerousHtml: true })
 		.process(md);
-	return String(result);
+	// remark-gfm emits task-list checkboxes as disabled by default — strip so they're interactive
+	return String(result).replace(/ disabled=""/g, '');
 }
 
 export function prereqsParserPlugin(): Plugin {
@@ -53,7 +54,8 @@ export const notice = ${JSON.stringify(frontmatter.notice ?? '')};
 `.trim();
 		},
 		handleHotUpdate({ file, server }) {
-			if (file.endsWith('prereqs/workshop.md')) {
+			// Use direct equality (prereqsFile is already an absolute, normalized path)
+			if (file === prereqsFile) {
 				const mod = server.moduleGraph.getModuleById(RESOLVED_ID);
 				if (mod) {
 					server.moduleGraph.invalidateModule(mod);

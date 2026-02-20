@@ -4,20 +4,18 @@
 
 	let checked = $state<Record<string, boolean>>({});
 
-	function toggle(id: string) {
-		checked[id] = !checked[id];
-	}
-
 	$effect(() => {
 		const container = document.querySelector('.prereqs-body');
 		if (!container) return;
-		const inputs = container.querySelectorAll('input[type="checkbox"]');
-		inputs.forEach((input, i) => {
+		const inputs = Array.from(container.querySelectorAll('input[type="checkbox"]'));
+		const handlers = inputs.map((input, i) => {
 			const el = input as HTMLInputElement;
 			const key = `item-${i}`;
-			el.checked = checked[key] ?? false;
-			el.addEventListener('change', () => toggle(key));
+			const handler = () => { checked[key] = el.checked; };
+			el.addEventListener('change', handler);
+			return { el, handler };
 		});
+		return () => { handlers.forEach(({ el, handler }) => el.removeEventListener('change', handler)); };
 	});
 </script>
 

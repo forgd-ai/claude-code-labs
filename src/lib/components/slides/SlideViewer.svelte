@@ -92,6 +92,12 @@
 		<div class="progress-fill" style="width: {progress}%"></div>
 	</div>
 
+	<!-- Logo chrome -->
+	<div class="slide-chrome">
+		<img src="/logos/anthropic-wordmark.png" alt="Anthropic" class="logo-anthropic" />
+		<img src="/logos/forgd.png" alt="forgd" class="logo-forgd" />
+	</div>
+
 	<!-- Slide content -->
 	{#if slide}
 		<div class="slide slide-{slide.type}">
@@ -424,6 +430,39 @@
 		float: right;
 		width: 46%;
 	}
+
+	/* === Logo chrome === */
+	.slide-chrome {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		padding: 2.5% 3.5%;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		z-index: 5;
+		pointer-events: none;
+	}
+
+	.logo-anthropic {
+		height: clamp(10px, 1.8vw, 18px);
+		width: auto;
+	}
+
+	.logo-forgd {
+		height: clamp(12px, 2vw, 20px);
+		width: auto;
+	}
+
+	/* On dark slides invert both logos to white */
+	.theme-dark .logo-anthropic,
+	.theme-dark .logo-forgd {
+		filter: brightness(0) invert(1);
+	}
+
+	/* Anthropic wordmark is dark on transparent — works on light/orange as-is */
+	/* forgd logo is colored — keep as-is on light/orange */
 
 	/* === Controls === */
 	.controls {

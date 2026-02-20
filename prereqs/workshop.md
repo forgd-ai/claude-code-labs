@@ -4,7 +4,7 @@ subtitle: Claude Code Workshop
 notice: Share with all registered attendees 2+ weeks before the workshop
 ---
 
-## Required Setup
+## Required Setup (Complete Before Workshop)
 
 ### Hardware
 
@@ -26,14 +26,14 @@ notice: Share with all registered attendees 2+ weeks before the workshop
 
 ### Account Setup
 
-- [ ] Claude Console account created (individual or organization)
+- [ ] Claude Sonnet/Opus access via Anthropic API or AWS Bedrock
 - [ ] Account type confirmed (individual vs. organization — affects setup)
 
 ### Skills
 
-- Basic familiarity with command line/terminal is helpful
-- Basic programming experience (any language) is helpful
-- Willingness to troubleshoot and learn
+- [ ] Basic familiarity with command line/terminal is helpful
+- [ ] Basic programming experience (any language) is helpful
+- [ ] Willingness to troubleshoot and learn
 
 ## Installation Instructions
 
@@ -57,24 +57,24 @@ Ask *'Hey Claude, tell me about how to use Claude Code?'*
 
 ## Common Setup Issues
 
-### Corporate firewall blocking Claude Code
+### Issue: Corporate firewall blocking Claude Code
 
 - **Solution:** Work with your IT team to allow-list Claude Code domains
 - **Alternative:** Test on personal device or home network first
 - **Backup plan:** Join the pre-workshop office hours for live troubleshooting
 
-### Windows WSL not enabled
+### Issue: Windows WSL not enabled
 
 - **Solution:** Follow Windows WSL installation guide: [learn.microsoft.com/en-us/windows/wsl/install](https://learn.microsoft.com/en-us/windows/wsl/install)
 - **Time required:** 30–45 minutes
 - **Note:** Requires administrator access on your machine
 
-### Account type confusion (individual vs. organization)
+### Issue: Account type confusion (individual vs. organization)
 
 - **Solution:** Check your account settings at [console.anthropic.com/settings](https://console.anthropic.com/settings)
 - **Difference:** Organization accounts may have additional security requirements
 
-### Corrupted settings.json file
+### Issue: Corrupted settings.json file
 
 - **Solution:** Delete and regenerate settings file
 - **Common on:** Windows systems
@@ -82,11 +82,11 @@ Ask *'Hey Claude, tell me about how to use Claude Code?'*
 
 ## Recommended Preparation
 
-- Review Claude Code documentation: [code.claude.com/docs](https://code.claude.com/docs)
-- Identify a use case you'd like to explore during the workshop
-- Prepare 2–3 questions about your specific implementation needs
+- [ ] Review Claude Code documentation: [code.claude.com/docs](https://code.claude.com/docs)
+- [ ] Identify a use case you'd like to explore during the workshop
+- [ ] Prepare 2–3 questions about your specific implementation needs
 
-## Night Before Workshop
+## Final Checklist (Night Before Workshop)
 
 - [ ] Claude Code tested and working within last 24 hours
 - [ ] Google Meet link saved and tested
